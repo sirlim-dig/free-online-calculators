@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Freelancer Income Tracker — Free Notion-Style Template</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; background: #191919; color: #e0e0e0; }
+        .notion-page { background: #1e1e1e; border: 1px solid #333; }
+        .tag { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 12px; font-weight: 600; }
+        .tag-paid { background: #2b593f; color: #4ade80; }
+        .tag-pending { background: #5c4b28; color: #fbbf24; }
+        .tag-overdue { background: #5c2828; color: #f87171; }
+        .tag-recurring { background: #2b3f5c; color: #60a5fa; }
+        input, select { background: #2a2a2a; border: 1px solid #444; color: #e0e0e0; }
+        input:focus, select:focus { border-color: #60a5fa; outline: none; }
+        .stat-card { background: linear-gradient(135deg, #2a2a2a, #1a1a1a); border: 1px solid #333; }
+    </style>
+</head>
+<body class="min-h-screen p-4 md:p-8">
+    <div class="max-w-6xl mx-auto">
+        <!-- Header -->
+        <div class="mb-8">
+            <div class="flex items-center gap-3 mb-2">
+                <span class="text-4xl">💰</span>
+                <h1 class="text-3xl font-bold text-white">Freelancer Income Tracker</h1>
+            </div>
+            <p class="text-gray-400">Track every client, invoice, and payment. Know your numbers. Grow your income.</p>
+            <p class="text-xs text-gray-500 mt-1">Free template by <a href="https://sirlim-dig.github.io" class="text-blue-400">SirLiM Digital</a> • Works in any browser — export to CSV anytime</p>
+        </div>
+
+        <!-- Dashboard Stats -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+            <div class="stat-card rounded-xl p-4">
+                <p class="text-xs text-gray-400 uppercase tracking-wide">This Month</p>
+                <p class="text-2xl font-bold text-green-400" id="stat-month">$0</p>
+            </div>
+            <div class="stat-card rounded-xl p-4">
+                <p class="text-xs text-gray-400 uppercase tracking-wide">Total Earned</p>
+                <p class="text-2xl font-bold text-blue-400" id="stat-total">$0</p>
+            </div>
+            <div class="stat-card rounded-xl p-4">
+                <p class="text-xs text-gray-400 uppercase tracking-wide">Pending</p>
+                <p class="text-2xl font-bold text-yellow-400" id="stat-pending">$0</p>
+            </div>
+            <div class="stat-card rounded-xl p-4">
+                <p class="text-xs text-gray-400 uppercase tracking-wide">Avg per Project</p>
+                <p class="text-2xl font-bold text-purple-400" id="stat-avg">$0</p>
+            </div>
+        </div>
+
+        <!-- Monthly Chart -->
+        <div class="notion-page rounded-xl p-6 mb-8">
+            <h2 class="font-bold text-white mb-4">📊 Monthly Income</h2>
+            <div class="flex items-end gap-1 h-40" id="chart"></div>
+        </div>
+
+        <!-- Add Entry Form -->
+        <div class="notion-page rounded-xl p-6 mb-8">
+            <h2 class="font-bold text-white mb-4">➕ Add Income Entry</h2>
+            <div class="grid md:grid-cols-6 gap-3">
+                <input type="text" id="f-client" placeholder="Client Name" class="rounded-lg p-2 text-sm">
+                <input type="text" id="f-project" placeholder="Project" class="rounded-lg p-2 text-sm">
+                <input type="number" id="f-amount" placeholder="Amount ($)" class="rounded-lg p-2 text-sm">
+                <input type="date" id="f-date" class="rounded-lg p-2 text-sm">
+                <select id="f-status" class="rounded-lg p-2 text-sm">
+                    <option value="paid">✅ Paid</option>
+                    <option value="pending">⏳ Pending</option>
+                    <option value="overdue">🔴 Overdue</option>
+                </select>
+                <button onclick="addEntry()" class="bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-lg p-2 text-sm">Add</button>
+            </div>
+        </div>
+
+        <!-- Income Table -->
+        <div class="notion-page rounded-xl p-6 mb-8">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="font-bold text-white">📋 All Income</h2>
+                <div class="flex gap-2">
+                    <select id="filter-status" onchange="renderTable()" class="rounded-lg p-1.5 text-xs">
+                        <option value="all">All Status</option>
+                        <option value="paid">Paid</option>
+                        <option value="pending">Pending</option>
+                        <option value="overdue">Overdue</option>
+                    </select>
+                    <button onclick="exportCSV()" class="bg-gray-700 hover:bg-gray-600 text-white text-xs font-medium rounded-lg px-3 py-1.5">📥 Export CSV</button>
+                </div>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="w-full text-sm">
+                    <thead>
+                        <tr class="text-left text-gray-400 text-xs uppercase border-b border-gray-700">
+                            <th class="p-2">Date</th><th class="p-2">Client</th><th class="p-2">Project</th><th class="p-2">Amount</th><th class="p-2">Status</th><th class="p-2"></th>
+                        </tr>
+                    </thead>
+                    <tbody id="table-body"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Client Summary -->
+        <div class="notion-page rounded-xl p-6 mb-8">
+            <h2 class="font-bold text-white mb-4">👥 Client Summary</h2>
+            <div id="client-summary" class="space-y-2"></div>
+        </div>
+    </div>
+
+    <script>
+    let entries = JSON.parse(localStorage.getItem('freelancer-income') || '[]');
+    if(!entries.length) {
+        entries = [
+            {client:"Acme Corp",project:"Website Redesign",amount:2500,date:"2026-01-15",status:"paid"},
+            {client:"StartupXYZ",project:"SEO Audit",amount:800,date:"2026-01-22",status:"paid"},
+            {client:"Acme Corp",project:"Blog Content (5 posts)",amount:500,date:"2026-02-01",status:"paid"},
+            {client:"FreshBrand",project:"Landing Page",amount:1200,date:"2026-02-05",status:"pending"},
+            {client:"LocalBiz",project:"Social Media Setup",amount:350,date:"2026-02-08",status:"pending"},
+            {client:"StartupXYZ",project:"Monthly Retainer",amount:1500,date:"2026-02-10",status:"overdue"},
+        ];
+        save();
+    }
+    document.getElementById('f-date').value=new Date().toISOString().split('T')[0];
+
+    function save(){ localStorage.setItem('freelancer-income',JSON.stringify(entries)); }
+    function addEntry(){
+        const e={
+            client:document.getElementById('f-client').value||'Unknown',
+            project:document.getElementById('f-project').value||'Project',
+            amount:parseFloat(document.getElementById('f-amount').value)||0,
+            date:document.getElementById('f-date').value||new Date().toISOString().split('T')[0],
+            status:document.getElementById('f-status').value
+        };
+        entries.push(e); save(); render();
+        ['f-client','f-project','f-amount'].forEach(id=>document.getElementById(id).value='');
+    }
+    function deleteEntry(i){ entries.splice(i,1); save(); render(); }
+    function toggleStatus(i){
+        const order=['pending','paid','overdue'];
+        entries[i].status=order[(order.indexOf(entries[i].status)+1)%3];
+        save(); render();
+    }
+    function render(){ updateStats(); renderTable(); renderChart(); renderClients(); }
+    function updateStats(){
+        const now=new Date(), m=now.getMonth(), y=now.getFullYear();
+        const paid=entries.filter(e=>e.status==='paid');
+        const monthTotal=paid.filter(e=>{const d=new Date(e.date);return d.getMonth()===m&&d.getFullYear()===y;}).reduce((s,e)=>s+e.amount,0);
+        const total=paid.reduce((s,e)=>s+e.amount,0);
+        const pending=entries.filter(e=>e.status!=='paid').reduce((s,e)=>s+e.amount,0);
+        const avg=paid.length?Math.round(total/paid.length):0;
+        document.getElementById('stat-month').textContent='$'+monthTotal.toLocaleString();
+        document.getElementById('stat-total').textContent='$'+total.toLocaleString();
+        document.getElementById('stat-pending').textContent='$'+pending.toLocaleString();
+        document.getElementById('stat-avg').textContent='$'+avg.toLocaleString();
+    }
+    function renderTable(){
+        const filter=document.getElementById('filter-status').value;
+        const filtered=filter==='all'?entries:entries.filter(e=>e.status===filter);
+        const sorted=[...filtered].sort((a,b)=>new Date(b.date)-new Date(a.date));
+        document.getElementById('table-body').innerHTML=sorted.map((e,i)=>{
+            const ri=entries.indexOf(e);
+            const tagClass=e.status==='paid'?'tag-paid':e.status==='pending'?'tag-pending':'tag-overdue';
+            return `<tr class="border-b border-gray-800 hover:bg-gray-800/50">
+                <td class="p-2 text-gray-400">${e.date}</td>
+                <td class="p-2 font-medium text-white">${e.client}</td>
+                <td class="p-2 text-gray-300">${e.project}</td>
+                <td class="p-2 font-bold text-green-400">$${e.amount.toLocaleString()}</td>
+                <td class="p-2"><span class="tag ${tagClass} cursor-pointer" onclick="toggleStatus(${ri})">${e.status}</span></td>
+                <td class="p-2"><button onclick="deleteEntry(${ri})" class="text-red-400 hover:text-red-300 text-xs">✕</button></td>
+            </tr>`;
+        }).join('');
+    }
+    function renderChart(){
+        const months={};
+        entries.filter(e=>e.status==='paid').forEach(e=>{
+            const k=e.date.substring(0,7);
+            months[k]=(months[k]||0)+e.amount;
+        });
+        const keys=Object.keys(months).sort().slice(-6);
+        const max=Math.max(...keys.map(k=>months[k]),1);
+        document.getElementById('chart').innerHTML=keys.map(k=>{
+            const h=Math.max((months[k]/max)*100,4);
+            const label=new Date(k+'-01').toLocaleDateString('en',{month:'short'});
+            return `<div class="flex-1 flex flex-col items-center gap-1">
+                <span class="text-xs text-gray-400">$${months[k].toLocaleString()}</span>
+                <div class="w-full bg-blue-500 rounded-t" style="height:${h}%"></div>
+                <span class="text-xs text-gray-500">${label}</span>
+            </div>`;
+        }).join('');
+    }
+    function renderClients(){
+        const clients={};
+        entries.forEach(e=>{
+            if(!clients[e.client])clients[e.client]={total:0,paid:0,count:0};
+            clients[e.client].total+=e.amount;
+            clients[e.client].count++;
+            if(e.status==='paid')clients[e.client].paid+=e.amount;
+        });
+        const sorted=Object.entries(clients).sort((a,b)=>b[1].total-a[1].total);
+        document.getElementById('client-summary').innerHTML=sorted.map(([name,d])=>{
+            const pct=d.total?Math.round(d.paid/d.total*100):0;
+            return `<div class="flex justify-between items-center p-3 bg-gray-800/50 rounded-lg">
+                <div><span class="font-medium text-white">${name}</span><span class="text-xs text-gray-500 ml-2">${d.count} projects</span></div>
+                <div class="text-right"><span class="font-bold text-green-400">$${d.total.toLocaleString()}</span><span class="text-xs text-gray-500 ml-2">${pct}% collected</span></div>
+            </div>`;
+        }).join('');
+    }
+    function exportCSV(){
+        const rows=[['Date','Client','Project','Amount','Status'],...entries.map(e=>[e.date,e.client,e.project,e.amount,e.status])];
+        const csv=rows.map(r=>r.map(c=>`"${c}"`).join(',')).join('\n');
+        const a=document.createElement('a');
+        a.href='data:text/csv;charset=utf-8,'+encodeURIComponent(csv);
+        a.download='freelancer-income.csv';a.click();
+    }
+    render();
+    </script>
+</body>
+</html>
