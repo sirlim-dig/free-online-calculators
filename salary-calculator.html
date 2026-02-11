@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Salary Calculator — Hourly to Annual & Take-Home Pay | Free Online Calculators</title>
+<meta name="description" content="Free salary calculator. Convert hourly to annual, calculate take-home pay after taxes, compare offers. No signup required.">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#f0f4f8;color:#333;line-height:1.6}
+.container{max-width:700px;margin:0 auto;padding:20px}
+header{background:linear-gradient(135deg,#2d3436,#636e72);color:#fff;padding:40px 20px;text-align:center;border-radius:0 0 20px 20px}
+h1{font-size:1.8rem;margin-bottom:8px}
+.subtitle{opacity:.8;font-size:.95rem}
+.card{background:#fff;border-radius:12px;padding:30px;margin:20px 0;box-shadow:0 4px 15px rgba(0,0,0,.08)}
+label{display:block;font-weight:600;margin:15px 0 5px}
+input,select{width:100%;padding:12px;border:2px solid #ddd;border-radius:8px;font-size:1rem}
+input:focus,select:focus{border-color:#0984e3;outline:none}
+.row{display:flex;gap:15px}
+.row>*{flex:1}
+button{background:#0984e3;color:#fff;border:none;padding:14px;width:100%;border-radius:8px;font-size:1.1rem;cursor:pointer;margin-top:20px;font-weight:600}
+button:hover{background:#0773c5}
+.results{display:none}
+.result-grid{display:grid;grid-template-columns:1fr 1fr;gap:15px;margin-top:15px}
+.result-item{background:#f8f9fa;padding:15px;border-radius:8px;text-align:center}
+.result-item .label{font-size:.85rem;color:#636e72}
+.result-item .value{font-size:1.4rem;font-weight:700;color:#2d3436;margin-top:4px}
+.affiliate{background:#fff3cd;border:1px solid #ffc107;border-radius:8px;padding:15px;margin:20px 0;font-size:.9rem}
+.affiliate a{color:#0984e3;font-weight:600}
+footer{text-align:center;padding:30px;color:#999;font-size:.85rem}
+footer a{color:#0984e3}
+</style>
+</head>
+<body>
+<header>
+<h1>💰 Salary Calculator</h1>
+<p class="subtitle">Hourly → Annual • Take-Home Pay • Tax Estimates</p>
+</header>
+<div class="container">
+<div class="card">
+<label>Pay Type</label>
+<select id="payType" onchange="toggleFields()">
+<option value="hourly">Hourly Rate</option>
+<option value="annual">Annual Salary</option>
+<option value="monthly">Monthly Salary</option>
+</select>
+<label>Amount ($)</label>
+<input type="number" id="amount" placeholder="e.g. 25" step="0.01">
+<div class="row">
+<div>
+<label>Hours/Week</label>
+<input type="number" id="hours" value="40">
+</div>
+<div>
+<label>Weeks/Year</label>
+<input type="number" id="weeks" value="52">
+</div>
+</div>
+<label>Estimated Tax Rate (%)</label>
+<input type="number" id="taxRate" value="25" min="0" max="60">
+<button onclick="calculate()">Calculate Salary</button>
+</div>
+<div class="results card" id="results">
+<h2>Your Salary Breakdown</h2>
+<div class="result-grid">
+<div class="result-item"><div class="label">Annual (Gross)</div><div class="value" id="annual">-</div></div>
+<div class="result-item"><div class="label">Monthly (Gross)</div><div class="value" id="monthly">-</div></div>
+<div class="result-item"><div class="label">Bi-Weekly (Gross)</div><div class="value" id="biweekly">-</div></div>
+<div class="result-item"><div class="label">Hourly Rate</div><div class="value" id="hourly">-</div></div>
+<div class="result-item"><div class="label">Annual (After Tax)</div><div class="value" id="netAnnual">-</div></div>
+<div class="result-item"><div class="label">Monthly (After Tax)</div><div class="value" id="netMonthly">-</div></div>
+</div>
+</div>
+<div class="affiliate">
+📚 <strong>Want to negotiate a higher salary?</strong> Check out <a href="https://www.amazon.com/Never-Split-Difference-Negotiating-Depended/dp/0062407805?tag=sirlim06-20" target="_blank">Never Split the Difference</a> — the #1 negotiation book. Also: <a href="https://www.amazon.com/Youre-Paid-What-Worth-Getting/dp/0062855476?tag=sirlim06-20" target="_blank">You're Paid What You're Worth</a>.
+</div>
+<div class="card" style="font-size:.9rem">
+<h3>💡 Salary Tips</h3>
+<ul style="margin:10px 0 0 20px">
+<li>Always negotiate — even 5% adds up to thousands over years</li>
+<li>Factor in benefits (health, 401k match, PTO) when comparing offers</li>
+<li>Use the 50/30/20 rule: 50% needs, 30% wants, 20% savings</li>
+<li>A $1/hr raise = ~$2,080/year more</li>
+</ul>
+</div>
+<footer>
+<a href="index.html">← More Free Calculators</a> | Built with ❤️
+</footer>
+</div>
+<script>
+function toggleFields(){const t=document.getElementById('payType').value;document.getElementById('hours').parentElement.parentElement.style.display=t==='hourly'?'flex':'none'}
+function fmt(n){return'$'+n.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g,',')}
+function calculate(){
+const type=document.getElementById('payType').value;
+const amount=parseFloat(document.getElementById('amount').value)||0;
+const hours=parseFloat(document.getElementById('hours').value)||40;
+const weeks=parseFloat(document.getElementById('weeks').value)||52;
+const tax=parseFloat(document.getElementById('taxRate').value)||25;
+let annual;
+if(type==='hourly')annual=amount*hours*weeks;
+else if(type==='monthly')annual=amount*12;
+else annual=amount;
+const h=annual/(hours*weeks);
+const net=annual*(1-tax/100);
+document.getElementById('annual').textContent=fmt(annual);
+document.getElementById('monthly').textContent=fmt(annual/12);
+document.getElementById('biweekly').textContent=fmt(annual/26);
+document.getElementById('hourly').textContent=fmt(h);
+document.getElementById('netAnnual').textContent=fmt(net);
+document.getElementById('netMonthly').textContent=fmt(net/12);
+document.getElementById('results').style.display='block';
+}
+</script>
+</body>
+</html>
