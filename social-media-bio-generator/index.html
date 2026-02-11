@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Free Social Media Bio Generator — Instagram, Twitter/X, LinkedIn, TikTok</title>
+    <meta name="description" content="Generate the perfect social media bio in seconds. Free bio generator for Instagram, Twitter/X, LinkedIn, TikTok, and more. Stand out from the crowd.">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+        .gradient-bg { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <nav class="bg-white shadow-sm">
+        <div class="max-w-4xl mx-auto px-4 py-3 flex justify-between items-center">
+            <a href="/" class="font-bold text-purple-600">⚡ BioGen</a>
+            <a href="https://sirlim-dig.github.io/free-online-calculators/" class="text-sm text-gray-500 hover:text-purple-600">More Free Tools →</a>
+        </div>
+    </nav>
+
+    <header class="gradient-bg text-white py-12 text-center">
+        <h1 class="text-4xl font-extrabold mb-2">Social Media Bio Generator</h1>
+        <p class="text-purple-100 text-lg">Create the perfect bio for any platform in seconds. 100% free.</p>
+    </header>
+
+    <main class="max-w-4xl mx-auto px-4 py-10">
+        <!-- Input Form -->
+        <div class="bg-white rounded-2xl shadow-lg p-6 md:p-8 mb-8">
+            <h2 class="text-xl font-bold mb-4">Tell us about yourself</h2>
+            <div class="grid md:grid-cols-2 gap-4">
+                <div>
+                    <label class="text-sm font-medium text-gray-700">Your Name / Brand</label>
+                    <input type="text" id="name" placeholder="e.g., Sarah Johnson" class="w-full mt-1 p-3 border rounded-lg focus:ring-2 focus:ring-purple-300 focus:border-purple-500 outline-none">
+                </div>
+                <div>
+                    <label class="text-sm font-medium text-gray-700">What do you do?</label>
+                    <input type="text" id="role" placeholder="e.g., Photographer, Developer, Coach" class="w-full mt-1 p-3 border rounded-lg focus:ring-2 focus:ring-purple-300 focus:border-purple-500 outline-none">
+                </div>
+                <div>
+                    <label class="text-sm font-medium text-gray-700">Your niche / industry</label>
+                    <input type="text" id="niche" placeholder="e.g., Travel, Fitness, Tech, Food" class="w-full mt-1 p-3 border rounded-lg focus:ring-2 focus:ring-purple-300 focus:border-purple-500 outline-none">
+                </div>
+                <div>
+                    <label class="text-sm font-medium text-gray-700">Location (optional)</label>
+                    <input type="text" id="location" placeholder="e.g., NYC, Remote, Worldwide" class="w-full mt-1 p-3 border rounded-lg focus:ring-2 focus:ring-purple-300 focus:border-purple-500 outline-none">
+                </div>
+                <div>
+                    <label class="text-sm font-medium text-gray-700">Key achievement or unique trait</label>
+                    <input type="text" id="achievement" placeholder="e.g., 10K+ clients helped, Featured in Forbes" class="w-full mt-1 p-3 border rounded-lg focus:ring-2 focus:ring-purple-300 focus:border-purple-500 outline-none">
+                </div>
+                <div>
+                    <label class="text-sm font-medium text-gray-700">Call to action / link</label>
+                    <input type="text" id="cta" placeholder="e.g., Book a call ↓, Shop now ↓, Link below" class="w-full mt-1 p-3 border rounded-lg focus:ring-2 focus:ring-purple-300 focus:border-purple-500 outline-none">
+                </div>
+            </div>
+            <div class="grid md:grid-cols-2 gap-4 mt-4">
+                <div>
+                    <label class="text-sm font-medium text-gray-700">Platform</label>
+                    <select id="platform" class="w-full mt-1 p-3 border rounded-lg focus:ring-2 focus:ring-purple-300 outline-none">
+                        <option value="instagram">📸 Instagram (150 chars)</option>
+                        <option value="twitter">🐦 Twitter/X (160 chars)</option>
+                        <option value="tiktok">🎵 TikTok (80 chars)</option>
+                        <option value="linkedin">💼 LinkedIn (220 chars)</option>
+                        <option value="youtube">▶️ YouTube (1000 chars)</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="text-sm font-medium text-gray-700">Vibe / Tone</label>
+                    <select id="tone" class="w-full mt-1 p-3 border rounded-lg focus:ring-2 focus:ring-purple-300 outline-none">
+                        <option value="professional">💼 Professional</option>
+                        <option value="casual">😎 Casual & Fun</option>
+                        <option value="minimal">✨ Minimal & Clean</option>
+                        <option value="bold">🔥 Bold & Confident</option>
+                        <option value="creative">🎨 Creative & Quirky</option>
+                        <option value="motivational">💪 Motivational</option>
+                    </select>
+                </div>
+            </div>
+            <button onclick="generate()" class="mt-6 w-full bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-6 rounded-lg transition text-lg">✨ Generate Bios</button>
+        </div>
+
+        <!-- Results -->
+        <div id="results" class="hidden space-y-4">
+            <h2 class="text-xl font-bold">Your Generated Bios</h2>
+            <p class="text-sm text-gray-500">Click any bio to copy it to clipboard</p>
+            <div id="bios-container" class="space-y-3"></div>
+            <button onclick="generate()" class="w-full bg-gray-200 hover:bg-gray-300 text-gray-700 font-bold py-3 px-6 rounded-lg transition">🔄 Generate More</button>
+        </div>
+
+        <!-- SEO Content -->
+        <div class="mt-16 prose max-w-none">
+            <h2 class="text-2xl font-bold">How to Write the Perfect Social Media Bio</h2>
+            <p>Your social media bio is your digital first impression. In just a few seconds, visitors decide whether to follow you or scroll past. Our free bio generator helps you craft the perfect bio for any platform.</p>
+            <h3 class="text-xl font-bold mt-6">Tips for Each Platform</h3>
+            <div class="grid md:grid-cols-2 gap-6 mt-4 not-prose">
+                <div class="bg-white p-5 rounded-xl shadow-sm">
+                    <h4 class="font-bold">📸 Instagram Bio Tips</h4>
+                    <ul class="text-sm text-gray-600 mt-2 space-y-1">
+                        <li>• Max 150 characters — every word counts</li>
+                        <li>• Use line breaks for scanability</li>
+                        <li>• Include 1-2 relevant emojis</li>
+                        <li>• End with a clear CTA</li>
+                    </ul>
+                </div>
+                <div class="bg-white p-5 rounded-xl shadow-sm">
+                    <h4 class="font-bold">🐦 Twitter/X Bio Tips</h4>
+                    <ul class="text-sm text-gray-600 mt-2 space-y-1">
+                        <li>• 160 characters — be concise</li>
+                        <li>• Show personality and wit</li>
+                        <li>• Mention what you tweet about</li>
+                        <li>• Hashtags can help discovery</li>
+                    </ul>
+                </div>
+                <div class="bg-white p-5 rounded-xl shadow-sm">
+                    <h4 class="font-bold">💼 LinkedIn Bio Tips</h4>
+                    <ul class="text-sm text-gray-600 mt-2 space-y-1">
+                        <li>• Lead with your value proposition</li>
+                        <li>• Include measurable achievements</li>
+                        <li>• Use industry keywords for search</li>
+                        <li>• Professional but personable tone</li>
+                    </ul>
+                </div>
+                <div class="bg-white p-5 rounded-xl shadow-sm">
+                    <h4 class="font-bold">🎵 TikTok Bio Tips</h4>
+                    <ul class="text-sm text-gray-600 mt-2 space-y-1">
+                        <li>• Only 80 characters — ultra short</li>
+                        <li>• Be fun and authentic</li>
+                        <li>• Tell people what content to expect</li>
+                        <li>• Emojis work great here</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-gray-900 text-gray-400 py-8 mt-16">
+        <div class="max-w-4xl mx-auto px-4 text-center text-sm">
+            <p>© 2026 BioGen. A free tool by <a href="https://sirlim-dig.github.io/free-online-calculators/" class="text-purple-400 hover:text-purple-300">SirLiM Digital</a></p>
+            <p class="mt-2">100% free. No signup required. No data stored.</p>
+        </div>
+    </footer>
+
+    <script>
+    const limits={instagram:150,twitter:160,tiktok:80,linkedin:220,youtube:1000};
+    const emojis={
+        professional:['💼','📊','🎯','📈','✅','🏆'],
+        casual:['✌️','🌟','☀️','🎉','💫','😊'],
+        minimal:['→','—','·','✦','○','∙'],
+        bold:['🔥','💪','⚡','🚀','👊','💯'],
+        creative:['🎨','✨','🌈','🦋','💡','🪄'],
+        motivational:['💪','🌟','🔥','🏆','⭐','💫']
+    };
+
+    const templates={
+        professional:{
+            instagram:[
+                "{role} | {niche}\n{achievement}\n{cta}",
+                "{role} helping you {niche_verb}\n📍 {location}\n{achievement}\n👇 {cta}",
+                "✅ {role}\n📍 {location}\n🏆 {achievement}\n{cta}",
+                "{niche} {role} | {location}\n{achievement}\n📩 {cta}"
+            ],
+            twitter:[
+                "{role} | {niche} enthusiast | {achievement} | {location}",
+                "{role} in {niche}. {achievement}. {cta}.",
+                "Helping people with {niche}. {role} based in {location}. {achievement}.",
+                "{niche} {role} · {achievement} · {location} · {cta}"
+            ],
+            tiktok:[
+                "{role} ✅ {niche} tips daily",
+                "{niche} {role} | {location} 📍",
+                "Your go-to {niche} {role} ✨",
+                "{role} · {niche} · {cta}"
+            ],
+            linkedin:[
+                "{role} | Passionate about {niche} | {achievement} | Based in {location} | {cta}",
+                "I help people succeed in {niche} as a {role}. {achievement}. Currently in {location}. {cta}",
+                "{role} specializing in {niche}. {achievement}. Open to opportunities. {location}."
+            ],
+            youtube:[
+                "Hey! I'm {name}, a {role} who's passionate about {niche}.\n\n{achievement}.\n\nOn this channel, you'll find videos about {niche} — tips, tutorials, and real talk.\n\n📍 {location}\n\n{cta}\n\nNew videos every week! 🎬"]
+        },
+        casual:{
+            instagram:[
+                "just a {role} doing {niche} things ✌️\n📍 {location}\n{cta}",
+                "{niche} lover | {role} by day\n{achievement} 🎉\n{cta} 👇",
+                "hey! i'm into {niche} 🌟\n{role} | {location}\n{cta}",
+                "living that {niche} life ☀️\n{role} | {achievement}\n{cta}"
+            ],
+            twitter:[
+                "just a {role} who loves {niche} | {location} | {cta}",
+                "{niche} nerd 🤓 | {role} | {achievement}",
+                "tweets about {niche} and life | {role} | {location}",
+                "{role} · {niche} fan · probably overthinking · {location}"
+            ],
+            tiktok:[
+                "{niche} content ✌️ {role}",
+                "just a {role} on the internet",
+                "{niche} tips from your fav {role}",
+                "follow for {niche} vibes 🌟"
+            ],
+            linkedin:[
+                "{role} who's all about {niche} | {achievement} | {location} | Let's connect!",
+                "Making {niche} fun and accessible as a {role}. {achievement}. Say hi! 👋"
+            ],
+            youtube:[
+                "Hey there! 👋 I'm {name}!\n\nI make videos about {niche} because honestly, I can't stop talking about it.\n\n{achievement} and still going!\n\n📍 {location}\n\n{cta}\n\nLet's hang out — new vids weekly! 🎬"]
+        },
+        minimal:{
+            instagram:[
+                "{role}\n{niche}\n{location}",
+                "{role} → {niche}\n{cta}",
+                "{name}\n{role} · {niche}\n{location}",
+                "{niche} · {role} · {location}"
+            ],
+            twitter:[
+                "{role}. {niche}. {location}.",
+                "{role} — {niche}",
+                "{name}. {role}. {achievement}.",
+                "{niche} · {location}"
+            ],
+            tiktok:[
+                "{role} · {niche}",
+                "{niche}",
+                "{role} | {location}",
+                "{name} · {niche}"
+            ],
+            linkedin:[
+                "{role} | {niche} | {location}",
+                "{role}. {achievement}. {niche}."
+            ],
+            youtube:[
+                "{name} — {role}\n\n{niche} content.\n{achievement}.\n\n{cta}"]
+        },
+        bold:{
+            instagram:[
+                "🔥 {role} who means business\n💪 {achievement}\n📍 {location}\n⚡ {cta}",
+                "THE {niche} {role} you need to follow 🚀\n{achievement}\n{cta} 👇",
+                "{role} | {niche} EXPERT\n{achievement} 💯\n{cta}",
+                "Making {niche} look EASY 🔥\n{role} | {location}\n{cta}"
+            ],
+            twitter:[
+                "🔥 {role} | {niche} expert | {achievement} | Let's GO",
+                "Building the future of {niche}. {role}. {achievement}. No cap.",
+                "Your favorite {niche} {role} 🚀 | {achievement} | {cta}",
+                "{role} on a MISSION | {niche} | {location} | {achievement}"
+            ],
+            tiktok:[
+                "THE {niche} {role} 🔥",
+                "{niche} EXPERT | follow or miss out",
+                "{role} 💪 {achievement}",
+                "making {niche} content that HITS"
+            ],
+            linkedin:[
+                "{role} disrupting {niche} | {achievement} | {location} | Let's build something incredible. {cta}",
+                "On a mission to transform {niche}. {role}. {achievement}. Ready for what's next."
+            ],
+            youtube:[
+                "WHAT'S UP! I'm {name} 🔥\n\n{role} here to DOMINATE {niche}.\n\n{achievement}.\n\n📍 {location}\n\n{cta}\n\nSMASH that subscribe button! 🚀"]
+        },
+        creative:{
+            instagram:[
+                "✨ {role} by trade, {niche} explorer by heart\n🦋 {achievement}\n📍 {location}\n🪄 {cta}",
+                "painting the world with {niche} 🎨\n{role} | dreamer | creator\n{cta}",
+                "half {role}, half {niche} obsessed 🌈\n{achievement}\n{cta} ↓",
+                "turning {niche} into magic ✨\n{role} · {location}\n{cta}"
+            ],
+            twitter:[
+                "✨ {role} × {niche} = my whole personality | {location}",
+                "making {niche} weird (in a good way) | {role} | {achievement}",
+                "{role} who thinks in {niche} | {location} | {cta}",
+                "probably thinking about {niche} right now 💡 | {role}"
+            ],
+            tiktok:[
+                "✨ {niche} but make it art",
+                "{role} with main character energy",
+                "creating {niche} magic 🪄",
+                "{niche} creator ✨ {location}"
+            ],
+            linkedin:[
+                "Creative {role} blending art and {niche} | {achievement} | {location} | Always exploring what's next. {cta}",
+                "Where {niche} meets creativity. {role}. {achievement}. Let's make something beautiful."
+            ],
+            youtube:[
+                "Welcome to my little corner of the internet! ✨\n\nI'm {name}, a {role} obsessed with all things {niche}.\n\n{achievement} — and the journey continues.\n\n📍 {location}\n\n{cta}\n\nNew creative adventures every week! 🎨"]
+        },
+        motivational:{
+            instagram:[
+                "💪 {role} on a mission\n🌟 {achievement}\n📍 {location}\n⭐ {cta}",
+                "Proving that {niche} can change lives 🔥\n{role} | {achievement}\n{cta} 👇",
+                "Started from zero. Now: {achievement} 💫\n{role} | {niche}\n{cta}",
+                "Your sign to start your {niche} journey 🌟\n{role} | {location}\n{cta}"
+            ],
+            twitter:[
+                "💪 {role} | Helping you crush {niche} | {achievement} | Never stop growing",
+                "From nothing to {achievement}. {role} in {niche}. Your turn. 🔥",
+                "Believe in your {niche} dreams | {role} | {achievement} | {cta}",
+                "Every day is a new chance to level up in {niche} 🌟 | {role}"
+            ],
+            tiktok:[
+                "💪 {niche} motivation daily",
+                "{role} helping you level up",
+                "your {niche} journey starts NOW 🔥",
+                "chase that {niche} dream 🌟"
+            ],
+            linkedin:[
+                "{role} empowering others through {niche} | {achievement} | {location} | Your potential is limitless. {cta}",
+                "Passionate {role} proving that {niche} changes lives. {achievement}. Let's grow together."
+            ],
+            youtube:[
+                "What's up, future champion! 💪\n\nI'm {name}, and I believe {niche} has the power to transform lives.\n\nAs a {role}, {achievement}.\n\n📍 {location}\n\n{cta}\n\nLet's level up TOGETHER! 🔥"]
+        }
+    };
+
+    const nicheVerbs={
+        default:'master your goals',travel:'explore the world',fitness:'get in shape',tech:'level up',food:'eat amazing',photography:'capture moments',business:'grow your business',music:'find your sound',fashion:'look incredible',art:'create beauty',health:'feel your best',finance:'build wealth',education:'learn faster',marketing:'grow your brand'
+    };
+
+    function getNicheVerb(niche){
+        const n=niche.toLowerCase();
+        for(const[k,v]of Object.entries(nicheVerbs)){if(n.includes(k))return v;}
+        return `succeed in ${niche}`;
+    }
+
+    function fillTemplate(tpl,data){
+        return tpl.replace(/{(\w+)}/g,(m,k)=>data[k]||'').replace(/\n\n+/g,'\n').replace(/\| \|/g,'|').replace(/· ·/g,'·').replace(/\s+\|$/,'').replace(/^\|\s+/,'').trim();
+    }
+
+    function generate(){
+        const data={
+            name:document.getElementById('name').value||'Your Name',
+            role:document.getElementById('role').value||'Creator',
+            niche:document.getElementById('niche').value||'awesome stuff',
+            location:document.getElementById('location').value||'Worldwide',
+            achievement:document.getElementById('achievement').value||'On a mission to help others',
+            cta:document.getElementById('cta').value||'Let\'s connect ↓',
+            niche_verb:getNicheVerb(document.getElementById('niche').value||'')
+        };
+        const platform=document.getElementById('platform').value;
+        const tone=document.getElementById('tone').value;
+        const limit=limits[platform];
+        const tpls=templates[tone][platform]||templates[tone].instagram;
+
+        const bios=tpls.map(t=>fillTemplate(t,data));
+        const container=document.getElementById('bios-container');
+        container.innerHTML=bios.map((bio,i)=>{
+            const over=bio.length>limit;
+            return `<div class="bg-white rounded-xl shadow-sm p-5 cursor-pointer hover:shadow-md transition border ${over?'border-red-200':'border-gray-100'}" onclick="copyBio(this,'${encodeURIComponent(bio)}')">
+                <div class="flex justify-between items-start mb-2">
+                    <span class="text-xs font-medium text-gray-400">Option ${i+1}</span>
+                    <span class="text-xs ${over?'text-red-500 font-bold':'text-gray-400'}">${bio.length}/${limit} chars${over?' ⚠️ over limit':''}</span>
+                </div>
+                <pre class="whitespace-pre-wrap text-gray-800 font-sans text-sm">${bio}</pre>
+                <p class="text-xs text-purple-500 mt-2 opacity-0 transition" id="copied-${i}">✅ Copied!</p>
+            </div>`;
+        }).join('');
+        document.getElementById('results').classList.remove('hidden');
+        document.getElementById('results').scrollIntoView({behavior:'smooth'});
+    }
+
+    function copyBio(el,encoded){
+        const text=decodeURIComponent(encoded);
+        navigator.clipboard.writeText(text).then(()=>{
+            const msg=el.querySelector('[id^="copied-"]');
+            msg.classList.remove('opacity-0');
+            setTimeout(()=>msg.classList.add('opacity-0'),2000);
+        });
+    }
+    </script>
+</body>
+</html>
