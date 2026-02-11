@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Unit Converter — Free Online Tool</title>
+  <meta name="description" content="Convert between common units of measurement quickly and easily.">
+  <meta property="og:title" content="Unit Converter">
+  <meta property="og:description" content="Convert between common units of measurement quickly and easily.">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f0f2f5; min-height: 100vh; display: flex; flex-direction: column; align-items: center; }
+    header { background: linear-gradient(135deg, #667eea, #764ba2); color: white; width: 100%; padding: 40px 20px; text-align: center; }
+    header h1 { font-size: 2rem; }
+    header p { opacity: 0.85; margin-top: 8px; }
+    .calculator { background: white; border-radius: 12px; padding: 30px; margin: 30px 20px; max-width: 500px; width: 100%; box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
+    .field { margin-bottom: 18px; }
+    .field label { display: block; font-weight: 600; margin-bottom: 6px; color: #444; }
+    .field input, .field select { width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 1rem; transition: border-color 0.2s; }
+    .field input:focus, .field select:focus { border-color: #667eea; outline: none; }
+    button { width: 100%; padding: 14px; background: linear-gradient(135deg, #667eea, #764ba2); color: white; border: none; border-radius: 8px; font-size: 1.1rem; font-weight: 600; cursor: pointer; transition: transform 0.1s; }
+    button:hover { transform: translateY(-1px); }
+    button:active { transform: translateY(0); }
+    .results { margin-top: 20px; }
+    .result-row { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #f0f0f0; }
+    .result-row:last-child { border-bottom: none; }
+    .result-label { color: #666; }
+    .result-value { font-weight: 700; color: #333; font-size: 1.1rem; }
+    .ad-placeholder { background: #f8f8f8; border: 2px dashed #ddd; padding: 15px; text-align: center; color: #aaa; margin: 20px; max-width: 500px; width: 100%; border-radius: 8px; font-size: 0.85rem; }
+    footer { margin-top: auto; padding: 30px; color: #888; font-size: 0.8rem; text-align: center; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Unit Converter</h1>
+    <p>Convert between common units of measurement quickly and easily.</p>
+  </header>
+  <div class="ad-placeholder"><!-- Ad Unit: Top --></div>
+  <div class="calculator">
+    <form onsubmit="return calc()">
+      <div class="field"><label for="value">Value</label><input type="number" id="value" value="100" ></div>
+        <div class="field"><label for="from">From</label><select id="from"><option value="km">km</option><option value="miles">miles</option><option value="meters">meters</option><option value="feet">feet</option><option value="kg">kg</option><option value="lbs">lbs</option><option value="celsius">celsius</option><option value="fahrenheit">fahrenheit</option></select></div>
+        <div class="field"><label for="to">To</label><select id="to"><option value="km">km</option><option value="miles">miles</option><option value="meters">meters</option><option value="feet">feet</option><option value="kg">kg</option><option value="lbs">lbs</option><option value="celsius">celsius</option><option value="fahrenheit">fahrenheit</option></select></div>
+      <button type="submit">Calculate</button>
+    </form>
+    <div class="results" id="results"></div>
+  </div>
+  <div class="ad-placeholder"><!-- Ad Unit: Bottom --></div>
+  <footer><p>&copy; 2026 Free Online Tools</p></footer>
+  <script>
+    function f(id) { return document.getElementById(id).value; }
+    function calc() {
+      try {
+        const results = (function() { 
+      const v = parseFloat(f('value'));
+      const from = f('from'); const to = f('to');
+      const toMetric = { km: v => v * 1000, miles: v => v * 1609.34, meters: v => v, feet: v => v * 0.3048, kg: v => v, lbs: v => v * 0.453592, celsius: v => v, fahrenheit: v => (v - 32) * 5/9 };
+      const fromMetric = { km: v => v / 1000, miles: v => v / 1609.34, meters: v => v, feet: v => v / 0.3048, kg: v => v, lbs: v => v / 0.453592, celsius: v => v, fahrenheit: v => v * 9/5 + 32 };
+      let result;
+      try {
+        const metric = toMetric[from](v);
+        result = fromMetric[to](metric);
+      } catch { result = NaN; }
+      return [{ label: 'Result', value: isNaN(result) ? 'Incompatible units' : result.toFixed(4) + ' ' + to }];
+     })();
+        document.getElementById('results').innerHTML = results.map(r =>
+          '<div class="result-row"><span class="result-label">' + r.label + '</span><span class="result-value">' + r.value + '</span></div>'
+        ).join('');
+      } catch(e) { document.getElementById('results').innerHTML = '<p style="color:red">Error: ' + e.message + '</p>'; }
+      return false;
+    }
+    calc(); // Initial calculation
+  </script>
+</body>
+</html>
